@@ -11,3 +11,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+/* Centrage horizontal et vertical du contenu principal */
+.main-content {
+  display: flex;
+  flex-direction: column; /* Colonne pour empiler titre + formulaire */
+  align-items: center;    /* Centre horizontalement */
+  justify-content: center; /* Centre verticalement si hauteur donnée */
+  min-height: 300px;      /* Ajuste la hauteur selon besoin */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Si tu veux limiter la largeur du formulaire pour qu'il ne soit pas trop large */
+.main-content > form {
+  width: 100%;
+  max-width: 400px; /* Max largeur du formulaire */
+}

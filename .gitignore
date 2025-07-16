@@ -1,6 +1,20 @@
-node_modules
+# 📦 Ne pas versionner les dépendances Node.js (elles seront installées avec npm install)
+node_modules/
 
+# 🔒 Ne pas versionner les fichiers contenant des variables sensibles comme les mots de passe ou les URI MongoDB
+.env
+
+# 🍏 Fichier système Mac généré automatiquement — inutile dans le dépôt
 .DS_Store
 
+# 🧠 Configuration personnelle de VS Code (dépend de l'utilisateur, pas de l'équipe)
 .vscode/
 
+# 🚧 Dossier de build React généré automatiquement (sera reconstruit en production)
+client/build/
+
+# 📝 Fichiers logs générés automatiquement par npm, Node ou le système
+*.log
+
+# 🧱 Fichier temporaire système Windows — inutile dans Git
+Thumbs.db

@@ -1,47 +1,31 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+// 📦 Importer Express pour créer le serveur
+const express = require('express');
 
-var app = express();
+// 🗂️ Importer path pour gérer les chemins de fichiers (utile pour servir React build)
+const path = require('path');
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+// 🔐 Charger les variables d'environnement depuis le fichier .env
+require('dotenv').config();
 
-app.set('port', process.env.PORT || 5000);
-console.log("+++++++++++++++" + app.get('port'));
+// 🚀 Créer une instance de l'application Express
+const app = express();
 
-app.use(logger('dev'));
+// 🧩 Middleware pour parser le corps des requêtes en JSON
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 
-app.use(express.static('./client/build'));
+// 🔁 Définir la route API qui utilise le routeur défini dans ./routes/new-index.js
+app.use('/api/data', require('./routes/new-index')); // exemple : http://localhost:5000/api/data
 
-app.use('/api/data', require('./routes/new-index.js'))
+// 🧱 Servir les fichiers statiques générés par React après build (dans client/build)
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
-app.get("*", (req, res) => { //our GET route needs to point to the index.html in our build
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    next(createError(404));
+// ⚠️ Pour toute autre requête (non-API), renvoyer index.html (permet le routage côté client avec React Router)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
-// error handler
-app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+// 🌐 Définir le port d'écoute (soit via la variable d'environnement PORT, soit 5000 par défaut)
+const PORT = process.env.PORT || 5000;
 
-    res.status(err.status || 500);
-    res.render('error');
-});
-
-module.exports = app;
-
-app.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + app.get('port'));
-});
+// 🎉 Lancer le serveur Express
+app.listen(PORT, () => console.log(`✅ Serveur lancé sur le port ${PORT}`));

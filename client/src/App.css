@@ -36,3 +36,44 @@
     transform: rotate(360deg);
   }
 }
+/* 🎨 Mise en page générale */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* 🧾 Contenu centré et responsive */
+.main-content {
+  flex: 1;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+/* 📺 Liste des séries */
+.show-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.show-list li {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* 🌐 NAVBAR */
+.navbar {
+  background-color: #0a4c8b;
+  padding: 15px;
+  color: white;
+  text-align: center;
+}
+
+/* 🦶 FOOTER */
+.footer {
+  background-color: #f1f1f1;
+  text-align: center;
+  padding: 15px;
+}
