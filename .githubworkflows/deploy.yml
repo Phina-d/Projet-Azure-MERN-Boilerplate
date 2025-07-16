@@ -1,34 +1,51 @@
-name: Deploy Node.js app to Azure Web App
+name: Azure Web App CI/CD
 
 on:
   push:
     branches:
-      - master  # Déclenche le workflow lors d'un push sur master
+      - master   # ou main selon ta branche par défaut
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: azure-mern-dakar   # Remplace par le nom exact de ton Web App Azure
-  AZURE_WEBAPP_PACKAGE_PATH: '.'        # Dossier racine du projet
-  NODE_VERSION: '20.x'
+  AZURE_WEBAPP_NAME: "azure-mern-dakar"    # Ton nom d'app Azure
+  AZURE_WEBAPP_PACKAGE_PATH: "."            # racine du projet
+  NODE_VERSION: "20.x"
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Set up Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
+        cache: npm
 
     - name: Install dependencies and build
       run: |
         npm install
         npm run build --if-present
+
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v4
+      with:
+        name: node-app
+        path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: 'Production'
+
+    steps:
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v4
+      with:
+        name: node-app
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
