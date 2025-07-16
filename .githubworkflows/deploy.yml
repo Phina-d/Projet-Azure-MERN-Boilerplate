@@ -1,0 +1,38 @@
+name: Deploy Node.js app to Azure Web App
+
+on:
+  push:
+    branches:
+      - master  # Déclenche le workflow lors d'un push sur master
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: azure-mern-dakar   # Remplace par le nom exact de ton Web App Azure
+  AZURE_WEBAPP_PACKAGE_PATH: '.'        # Dossier racine du projet
+  NODE_VERSION: '20.x'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies and build
+      run: |
+        npm install
+        npm run build --if-present
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
