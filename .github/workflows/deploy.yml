@@ -32,7 +32,7 @@ jobs:
       - name: Upload deploy package
         run: |
           mkdir deploy
-          cp -r server.js routes package.json .env deploy/
+          cp -r server.js routes package.json deploy/
           cp -r client/build deploy/client/
         shell: bash
 
