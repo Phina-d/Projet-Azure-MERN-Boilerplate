@@ -7,7 +7,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: azure-mern-dakar
-  NODE_VERSION: "20.x"
+  NODE_VERSION: 20.x
 
 jobs:
   build:
@@ -15,12 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Configuration de Node.js
+      - name: Configure Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Installer les dépendances pour le serveur
+      - name: Install server dependencies
         run: npm install
 
       - name: Build React client
@@ -29,32 +29,32 @@ jobs:
           npm install
           npm run build
 
-      - name: Télécharger le package de déploiement
+      - name: Prepare deploy folder
         run: |
           mkdir -p deploy/client
           cp -r server.js routes package.json deploy/
-          cp -r client/build deploy/client/
+          cp -r client/build/* deploy/client/
         shell: bash
 
-      - name: Upload deploy folder
+      - name: Upload deployment package
         uses: actions/upload-artifact@v4
         with:
           name: deploy-package
-          path: deploy
+          path: deploy/
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download deploy folder
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: deploy-package
           path: deploy
 
-      - name: Déployer sur Azure Web App
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: deploy
+
