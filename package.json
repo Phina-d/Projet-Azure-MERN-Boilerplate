@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "Backend Express pour projet MERN",
   "main": "server.js",
-  "scripts": {
+"scripts": {
   "start": "node server.js",
-  "heroku-postbuild": "cd client && npm install && npm run build"
+  "build": "cd client && npm install && npm run build"
 },
-  "author": "",
-  "license": "ISC",
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "cookie-parser": "^1.4.4",
     "dotenv": "^17.2.0",
