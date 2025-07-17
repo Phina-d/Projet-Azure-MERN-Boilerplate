@@ -36,7 +36,7 @@ jobs:
           cp -r client/build deploy/client/
         shell: bash
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: deploy-package
           path: deploy
