@@ -1,4 +1,4 @@
-name: Deploy MERN app to Azure WebApp
+name: Deploy to Azure WebApp
 
 on:
   push:
@@ -7,7 +7,10 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: azure-mern-dakar
+  AZURE_WEBAPP_PACKAGE_PATH: './deploy'
   NODE_VERSION: '20.x'
+  MONGO_URI: ${{ secrets.MONGO_URI }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
 jobs:
   build:
@@ -22,27 +25,28 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Install dependencies (backend)
+      - name: Install dependencies and build React app
         run: |
           npm install
+          npm run build --if-present
+        working-directory: ./client
 
-      - name: Build React frontend
-        run: |
-          cd client
-          npm install
-          npm run build
-
-      - name: Prepare deployment package
+      - name: Prepare deploy folder
         run: |
           rm -rf deploy
           mkdir -p deploy/client
-          cp -r server.js routes package.json .env deploy/
+          cp -r server.js routes package.json deploy/
           cp -r client/build deploy/client/
+
+      - name: Create .env file for deployment
+        run: |
+          echo "MONGO_URI=${MONGO_URI}" >> deploy/.env
+          echo "JWT_SECRET=${JWT_SECRET}" >> deploy/.env
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: deploy-package
+          name: node-app
           path: deploy
 
   deploy:
@@ -55,12 +59,12 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: deploy-package
+          name: node-app
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: deploy
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
