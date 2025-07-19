@@ -17,7 +17,7 @@ app.use(express.json());
 app.use('/api/data', require('./routes/new-index')); // exemple : http://localhost:5000/api/data
 
 // 🧱 Servir les fichiers statiques générés par React après build (dans client/build)
-const buildPath = path.join(__dirname, 'client', 'build');
+const buildPath = path.join(__dirname); // car maintenant les fichiers sont à la racine
 app.use(express.static(buildPath));
 
 // ⚠️ Pour toute autre requête (non-API), renvoyer index.html (permet le routage côté client avec React Router)
