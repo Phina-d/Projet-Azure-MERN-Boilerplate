@@ -6,7 +6,9 @@ const router = express.Router();
 const { MongoClient } = require('mongodb');
 
 // 🔒 Récupération de l'URL de connexion MongoDB depuis la variable d'environnement
-const url = process.env.MONGODB_URI;
+const url = process.env.MONGO_URI;
+console.log("🔗 URL Mongo utilisée :", url);
+
 
 
 // 🔁 Route GET pour récupérer toutes les données de la collection "collection1"
