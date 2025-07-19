@@ -89,7 +89,9 @@ Azure-MERN-Boilerplate/
    cd client
    npm start
 
-   visitez le Site à: https://azure-mern-dakar-hdbkbqhtfbckajfc.southafricanorth-01.azurewebsites.net/
+ ## 🌐 Démo en ligne
+
+👉 [Cliquez ici pour voir le site déployé sur Azure](https://azure-mern-dakar-hdbkbqhtfbckajfc.southafricanorth-01.azurewebsites.net/)
 
 Auteur
 Phina Diouf / Gomycode
