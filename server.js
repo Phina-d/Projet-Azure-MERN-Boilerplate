@@ -17,7 +17,7 @@ app.use(express.json());
 app.use('/api/data', require('./routes/new-index')); // exemple : http://localhost:5000/api/data
 
 // 🧱 Servir les fichiers statiques générés par React après build (dans client/build)
-const buildPath = path.join(__dirname); // car maintenant les fichiers sont à la racine
+const buildPath = path.join(__dirname, 'client', 'build');
 app.use(express.static(buildPath));
 
 // ⚠️ Pour toute autre requête (non-API), renvoyer index.html (permet le routage côté client avec React Router)
@@ -29,6 +29,4 @@ app.get('*', (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 // 🎉 Lancer le serveur Express
-app.listen(PORT, () => {
-  console.log(`✅ Serveur lancé sur le port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`✅ Serveur lancé sur le port ${PORT}`));

@@ -32,7 +32,8 @@ jobs:
       - name: Prepare deploy folder
         run: |
           mkdir -p deploy/client
-          cp -r server.js routes package.json deploy/
+          # Copier tous les fichiers sauf .env
+          cp server.js routes package.json deploy/
           cp -r client/build/* deploy/client/
         shell: bash
 
